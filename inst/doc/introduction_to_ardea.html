@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Nicholas Cooley" />
+
+<meta name="date" content="2026-09-28" />
+
+<title>ardea: introduction</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">ardea: introduction</h1>
+<h4 class="author">Nicholas Cooley</h4>
+<h4 class="date">2026-09-28</h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p><code>ardea</code> provides access to GPU devices and frameworks
+natively in R. It currently provides rudimentary access to
+<code>OpenCL</code>, <code>CUDA</code>, and <code>Metal</code>; letting
+users compile, test, and implement their own device specific code.
+<code>ardea</code> currently only <em>requires</em> existing OpenCL to
+install appropriately, but will selectively build out access to
+frameworks and devices that it can detect during package
+installation.</p>
+<p>This package currently does not provide an interface for vendor
+supplied libraries. Functionality is currently focused on ingesting a
+user supplied framework specific function, compiling that function and
+preparing it for dispatch, executing function dispatch and buffer
+management, and returning that function’s result to R.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ardea)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">opencl_is_available</span>()</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">cuda_is_available</span>()</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">metal_is_available</span>()</span></code></pre></div>
+<pre><code>## [1] TRUE
+## [1] FALSE
+## [1] TRUE</code></pre>
+<p>Using matrix multiplication as an example, a user can bring a naive
+mm kernel function conforming to the a given framework’s rules and
+requirements. In this case we can just write out our functions to temp
+files, and walk them forward through the frameworks and devices
+available on the current system. One of <code>ardea</code>’s current
+quirks is that it expects <strong>the first argument of a function to be
+the output</strong>. There is no keyword or tooling to enforce this, but
+the underlying buffer management currently only returns that first input
+from the device to R.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># write out a character vector to a tempfile for opencl, metal, and cuda</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>opencl_mm_naive <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="st">__kernel void opencl_mm_naive(__global float* output,</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="st">                              const long M,</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="st">                              const long K,</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="st">                              const long N,</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="st">                              __global const float* A,</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="st">                              __global const float* B)</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="st">{</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="st">    long row = get_global_id(0);</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="st">    long col = get_global_id(1);</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="st">    if (row &lt; M &amp;&amp; col &lt; N) {</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="st">        float sum = 0.0f;</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="st">        for (long k = 0; k &lt; K; k++) {</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="st">            sum += A[row + k * M] * B[k + col * K];</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="st">        }</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="st">        output[row + col * M] = sum;</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="st">    }</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="st">&#39;</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>tmp01 <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.cl&quot;</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="fu">writeLines</span>(<span class="at">text =</span> opencl_mm_naive,</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>           <span class="at">con =</span> tmp01)</span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>cuda_mm_naive <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="st">extern &quot;C&quot; __global__ void cuda_mm_naive(float* output,</span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="st">                                         const long long M,</span></span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="st">                                         const long long K,</span></span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="st">                                         const long long N,</span></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="st">                                         const float* A,</span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="st">                                         const float* B)</span></span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="st">{</span></span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="st">    long long row = blockIdx.x * blockDim.x + threadIdx.x;</span></span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="st">    long long col = blockIdx.y * blockDim.y + threadIdx.y;</span></span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="st">    if (row &lt; M &amp;&amp; col &lt; N) {</span></span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="st">        float sum = 0.0f;</span></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="st">        for (long long k = 0; k &lt; K; k++) {</span></span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="st">            sum += A[row + k * M] * B[k + col * K];</span></span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="st">        }</span></span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="st">        output[row + col * M] = sum;</span></span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="st">    }</span></span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="st">&#39;</span></span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a>tmp02 <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.cu&quot;</span>)</span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a>tmp03 <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.ptx&quot;</span>)</span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a><span class="fu">writeLines</span>(<span class="at">text =</span> cuda_mm_naive,</span>
+<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a>           <span class="at">con =</span> tmp02)</span>
+<span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a></span>
+<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a>metal_mm_naive <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
+<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a><span class="st">kernel void metal_mm_naive(device float* output [[buffer(0)]],</span></span>
+<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a><span class="st">                           constant uint&amp; M [[buffer(1)]],</span></span>
+<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a><span class="st">                           constant uint&amp; K [[buffer(2)]],</span></span>
+<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a><span class="st">                           constant uint&amp; N [[buffer(3)]],</span></span>
+<span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a><span class="st">                           device const float* A [[buffer(4)]],</span></span>
+<span id="cb3-57"><a href="#cb3-57" tabindex="-1"></a><span class="st">                           device const float* B [[buffer(5)]],</span></span>
+<span id="cb3-58"><a href="#cb3-58" tabindex="-1"></a><span class="st">                           uint2 id [[thread_position_in_grid]])</span></span>
+<span id="cb3-59"><a href="#cb3-59" tabindex="-1"></a><span class="st">{</span></span>
+<span id="cb3-60"><a href="#cb3-60" tabindex="-1"></a><span class="st">    uint row = id.x;</span></span>
+<span id="cb3-61"><a href="#cb3-61" tabindex="-1"></a><span class="st">    uint col = id.y;</span></span>
+<span id="cb3-62"><a href="#cb3-62" tabindex="-1"></a></span>
+<span id="cb3-63"><a href="#cb3-63" tabindex="-1"></a><span class="st">    if (row &lt; M &amp;&amp; col &lt; N) {</span></span>
+<span id="cb3-64"><a href="#cb3-64" tabindex="-1"></a><span class="st">        float sum = 0.0f;</span></span>
+<span id="cb3-65"><a href="#cb3-65" tabindex="-1"></a><span class="st">        for (uint k = 0; k &lt; K; k++) {</span></span>
+<span id="cb3-66"><a href="#cb3-66" tabindex="-1"></a><span class="st">            sum += A[row + k * M] * B[k + col * K];</span></span>
+<span id="cb3-67"><a href="#cb3-67" tabindex="-1"></a><span class="st">        }</span></span>
+<span id="cb3-68"><a href="#cb3-68" tabindex="-1"></a><span class="st">        output[row + col * M] = sum;</span></span>
+<span id="cb3-69"><a href="#cb3-69" tabindex="-1"></a><span class="st">    }</span></span>
+<span id="cb3-70"><a href="#cb3-70" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb3-71"><a href="#cb3-71" tabindex="-1"></a><span class="st">&#39;</span></span>
+<span id="cb3-72"><a href="#cb3-72" tabindex="-1"></a>tmp04 <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.metal&quot;</span>)</span>
+<span id="cb3-73"><a href="#cb3-73" tabindex="-1"></a>tmp05 <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.metallib&quot;</span>)</span>
+<span id="cb3-74"><a href="#cb3-74" tabindex="-1"></a><span class="fu">writeLines</span>(<span class="at">text =</span> metal_mm_naive,</span>
+<span id="cb3-75"><a href="#cb3-75" tabindex="-1"></a>           <span class="at">con =</span> tmp04)</span></code></pre></div>
+<p>Matrix multiplication doesn’t need a lot of setup when using the
+builtin <code>%*%</code> function, which is calling on your R
+installation’s BLAS library and is highly optimized. However, because
+we’re reaching out to a device almost entirely <em>ab initio</em> with
+no helpers, we need to perform the work that those helpers would
+perform.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># generic inputs, regardless of framework</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>var00 <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">&quot;numeric&quot;</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>               <span class="at">length =</span> <span class="dv">250000</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>var01 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">250000</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>               <span class="at">nrow =</span> <span class="dv">500</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>               <span class="at">ncol =</span> <span class="dv">500</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>var02 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">250000</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>               <span class="at">nrow =</span> <span class="dv">500</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>               <span class="at">ncol =</span> <span class="dv">500</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>dim01 <span class="ot">&lt;-</span> <span class="fu">nrow</span>(var01)</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>dim02 <span class="ot">&lt;-</span> <span class="fu">ncol</span>(var01)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co"># dim03 &lt;- nrow(var02)</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>dim04 <span class="ot">&lt;-</span> <span class="fu">ncol</span>(var02)</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>arg_list <span class="ot">&lt;-</span> <span class="fu">list</span>(var00, <span class="co"># our expected output vector, we&#39;ve just filled it with zeros</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>                 dim01,</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>                 dim02,</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>                 dim04,</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>                 <span class="fu">as.vector</span>(var01),</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>                 <span class="fu">as.vector</span>(var02))</span></code></pre></div>
+<p>Every framework has its own unique verbiage and intricacies, though
+they’re all <em>kind of</em> doing similar things. OpenCL is designed to
+be be deployable across a variety of device vendors and device
+<em>types</em>, not just GPUs. Metal is Apple’s proprietary GPU /
+accelerator framework, though it shares some conceptual choices with
+OpenCL as until recently Apple’s hardware stack was somewhat diverse.
+CUDA is NVIDIA’s well known framework for accessing their devices, and
+includes an intimidating array of libraries and functionalities.</p>
+<p>This means that frameworks share concepts, but not necessarily the
+same keywords, type names, specific paths, or user interactions.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>opencl_arg_types <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;float&quot;</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                      <span class="st">&quot;long&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                      <span class="st">&quot;long&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                      <span class="st">&quot;long&quot;</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>                      <span class="st">&quot;float&quot;</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>                      <span class="st">&quot;float&quot;</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>metal_arg_types <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;float&quot;</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>                    <span class="st">&quot;uint&quot;</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>                    <span class="st">&quot;uint&quot;</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>                    <span class="st">&quot;uint&quot;</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>                    <span class="st">&quot;float&quot;</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>                    <span class="st">&quot;float&quot;</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>cuda_arg_types <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;float&quot;</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>                    <span class="st">&quot;long&quot;</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>                    <span class="st">&quot;long&quot;</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>                    <span class="st">&quot;long&quot;</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>                    <span class="st">&quot;float&quot;</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>                    <span class="st">&quot;float&quot;</span>)</span></code></pre></div>
+<p>Though each framework handles program / module / library preparation
+somewhat uniquely, an effort has been made to unify how <em>users</em>
+interact with these steps. In this package OpenCL supports API-side
+compilation and program generation, while Metal supports both API-side,
+and system-side compilation and program management, and CUDA
+<em>only</em> supports system-side compilation. Meaning that under the
+hood Metal and CUDA are calling on system/vendor-specific compilers to
+build their libraries/modules (i.e. <code>clang</code> and
+<code>nvcc</code> respectively).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">opencl_is_available</span>() <span class="sc">&amp;</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>    <span class="fu">opencl_devices_exist</span>()) {</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;OpenCL is available on this system!&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  cl_dvcs <span class="ot">&lt;-</span> <span class="fu">opencl_device_information</span>()</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  cl_ctx <span class="ot">&lt;-</span> <span class="fu">opencl_make_context</span>(<span class="at">device =</span> cl_dvcs[[<span class="dv">1</span>]])</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  cl_program <span class="ot">&lt;-</span> <span class="fu">opencl_make_program</span>(<span class="at">cl_file =</span> tmp01,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>                                    <span class="at">context =</span> cl_ctx)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  cl_knl <span class="ot">&lt;-</span> <span class="fu">opencl_make_kernelptr</span>(<span class="at">program =</span> cl_program,</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>                                  <span class="at">kernel_names =</span> <span class="st">&quot;opencl_mm_naive&quot;</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>}</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">cuda_is_available</span>() <span class="sc">&amp;</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>    <span class="fu">cuda_devices_exist</span>()) {</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;CUDA is available on this system!&quot;</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  cu_dvcs <span class="ot">&lt;-</span> <span class="fu">cuda_device_information</span>()</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  cu_ctx <span class="ot">&lt;-</span> <span class="fu">cuda_make_context</span>(<span class="at">device =</span> cu_dvcs[[<span class="dv">1</span>]])</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  cu_program <span class="ot">&lt;-</span> <span class="fu">cuda_make_program</span>(<span class="at">cuda_file =</span> tmp02,</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>                                  <span class="at">context =</span> cu_ctx,</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>                                  <span class="at">ptx_file =</span> tmp03)</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  cu_knl <span class="ot">&lt;-</span> <span class="fu">cuda_make_kernelptr</span>(<span class="at">program =</span> cu_program,</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>                                <span class="at">context =</span> cu_ctx,</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>                                <span class="at">kernel_names =</span> <span class="st">&quot;cuda_mm_naive&quot;</span>)</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>}</span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">metal_is_available</span>() <span class="sc">&amp;</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>    <span class="fu">metal_devices_exist</span>()) {</span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;Metal is available on this system!&quot;</span>)</span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>  mtl_dvcs <span class="ot">&lt;-</span> <span class="fu">metal_device_information</span>()</span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a>  mtl_ctx <span class="ot">&lt;-</span> <span class="fu">metal_make_context</span>(<span class="at">device =</span> mtl_dvcs[[<span class="dv">1</span>]])</span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a>  mtl_program <span class="ot">&lt;-</span> <span class="fu">metal_make_program</span>(<span class="at">metal_file =</span> tmp04,</span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a>                                    <span class="at">metallib_file =</span> tmp05,</span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a>                                    <span class="at">context =</span> mtl_ctx)</span>
+<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a>  mtl_knl <span class="ot">&lt;-</span> <span class="fu">metal_make_kernelptr</span>(<span class="at">program =</span> mtl_program,</span>
+<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a>                                  <span class="at">context =</span> mtl_ctx,</span>
+<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a>                                  <span class="at">kernel_names =</span> <span class="st">&quot;metal_mm_naive&quot;</span>)</span>
+<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;OpenCL is available on this system!&quot;
+## [1] &quot;Metal is available on this system!&quot;</code></pre>
+<p>A simple wrapper function is supplied with <code>ardea</code>, though
+it is mostly a thin wrapper for <code>.Call()</code> runner functions.
+It does perform some error checking, but for the most part users are
+being trusted with their judgements.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># our builtin optimized CPU implementation</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">system.time</span>(res01 <span class="ot">&lt;-</span> var01 <span class="sc">%*%</span> var02) </span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">opencl_is_available</span>() <span class="sc">&amp;</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>    <span class="fu">opencl_devices_exist</span>()) {</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;OpenCL implementation:&quot;</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">system.time</span>(res02 <span class="ot">&lt;-</span> <span class="fu">simple_wrapper</span>(<span class="at">framework =</span> <span class="st">&quot;opencl&quot;</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>                                      <span class="at">context_ptr =</span> cl_ctx,</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>                                      <span class="at">kernel_ptr =</span> cl_knl<span class="sc">$</span>opencl_mm_naive,</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>                                      <span class="at">arg_types =</span> opencl_arg_types,</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>                                      <span class="at">arg_list =</span> arg_list,</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>                                      <span class="at">problem_dims =</span> <span class="fu">as.integer</span>(<span class="fu">c</span>(dim01,</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>                                                                  dim04,</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>                                                                  <span class="dv">1</span><span class="dt">L</span>)),</span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>                                      <span class="at">group_dims =</span> <span class="cn">NULL</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>                                      <span class="at">workers_per =</span> <span class="cn">NULL</span>))</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">as.vector</span>(res01),</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>       res02,</span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>       <span class="at">pch =</span> <span class="dv">46</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>}</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">cuda_is_available</span>() <span class="sc">&amp;</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>    <span class="fu">cuda_devices_exist</span>()) {</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;CUDA implementation:&quot;</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">system.time</span>(res03 <span class="ot">&lt;-</span> <span class="fu">simple_wrapper</span>(<span class="at">framework =</span> <span class="st">&quot;cuda&quot;</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>                                      <span class="at">context_ptr =</span> cu_ctx,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>                                      <span class="at">kernel_ptr =</span> cu_knl<span class="sc">$</span>cuda_mm_naive,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>                                      <span class="at">arg_types =</span> cuda_arg_types,</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>                                      <span class="at">arg_list =</span> arg_list,</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>                                      <span class="at">problem_dims =</span> <span class="fu">as.integer</span>(<span class="fu">c</span>(dim01,</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>                                                                  dim04,</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>                                                                  <span class="dv">1</span><span class="dt">L</span>)),</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>                                      <span class="at">group_dims =</span> <span class="cn">NULL</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>                                      <span class="at">workers_per =</span> <span class="cn">NULL</span>))</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">as.vector</span>(res01),</span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>       res03,</span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>       <span class="at">pch =</span> <span class="dv">46</span>)</span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>}</span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">metal_is_available</span>() <span class="sc">&amp;</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>    <span class="fu">metal_devices_exist</span>()) {</span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;Metal implementation:&quot;</span>)</span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a>  <span class="fu">system.time</span>(res03 <span class="ot">&lt;-</span> <span class="fu">simple_wrapper</span>(<span class="at">framework =</span> <span class="st">&quot;metal&quot;</span>,</span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a>                                      <span class="at">context_ptr =</span> mtl_ctx,</span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a>                                      <span class="at">kernel_ptr =</span> mtl_knl<span class="sc">$</span>metal_mm_naive,</span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a>                                      <span class="at">arg_types =</span> metal_arg_types,</span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a>                                      <span class="at">arg_list =</span> arg_list,</span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a>                                      <span class="at">problem_dims =</span> <span class="fu">as.integer</span>(<span class="fu">c</span>(dim01,</span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a>                                                                  dim04,</span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a>                                                                  <span class="dv">1</span><span class="dt">L</span>)),</span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a>                                      <span class="at">group_dims =</span> <span class="cn">NULL</span>,</span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a>                                      <span class="at">workers_per =</span> <span class="cn">NULL</span>))</span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">as.vector</span>(res01),</span>
+<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a>       res03,</span>
+<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a>       <span class="at">pch =</span> <span class="dv">46</span>)</span>
+<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a>}</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<pre><code>##    user  system elapsed 
+##   0.030   0.000   0.031 
+## [1] &quot;OpenCL implementation:&quot;
+## [1] &quot;Metal implementation:&quot;</code></pre>
+<p>This is currently the limit of <code>ardea</code>’s functionality.
+This package began mostly as a curiousity project with Metal, and
+turning it into a CRAN acceptable package became a bit of a labor of
+love. If folks find this package useful I will consider expanding it to
+include other vendors, or more complicated dispatch routines. As it
+stands now, my primary concerns are conforming to CRAN submission
+guidelines, ensuring user interactions are clear and predictable, and
+working through a non-trivial TODO list.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>## R version 4.5.1 (2025-06-13)
+## Platform: aarch64-apple-darwin20
+## Running under: macOS Sequoia 15.7.9
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+## 
+## locale:
+## [1] C/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## time zone: America/New_York
+## tzcode source: internal
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] ardea_0.0.9
+## 
+## loaded via a namespace (and not attached):
+##  [1] digest_0.6.39   R6_2.6.1        fastmap_1.2.0   xfun_0.56      
+##  [5] cachem_1.1.0    knitr_1.50      htmltools_0.5.9 rmarkdown_2.30 
+##  [9] lifecycle_1.0.5 cli_3.6.6       sass_0.4.10     jquerylib_0.1.4
+## [13] compiler_4.5.1  tools_4.5.1     evaluate_1.0.5  bslib_0.9.0    
+## [17] yaml_2.3.11     rlang_1.2.0     jsonlite_2.0.0</code></pre>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
