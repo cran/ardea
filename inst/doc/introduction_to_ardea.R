@@ -155,9 +155,15 @@ if (metal_is_available() &
   print("Metal is available on this system!")
   mtl_dvcs <- metal_device_information()
   mtl_ctx <- metal_make_context(device = mtl_dvcs[[1]])
-  mtl_program <- metal_make_program(metal_file = tmp04,
-                                    metallib_file = tmp05,
-                                    context = mtl_ctx)
+  if (metal_compiler_is_available()) {
+    mtl_program <- metal_make_program(metal_file = tmp04,
+                                      metallib_file = tmp05,
+                                      context = mtl_ctx)
+  } else {
+    mtl_program <- metal_make_program(metal_file = tmp04,
+                                      context = mtl_ctx)
+  }
+  
   mtl_knl <- metal_make_kernelptr(program = mtl_program,
                                   context = mtl_ctx,
                                   kernel_names = "metal_mm_naive")
@@ -169,53 +175,56 @@ system.time(res01 <- var01 %*% var02)
 if (opencl_is_available() &
     opencl_devices_exist()) {
   print("OpenCL implementation:")
-  system.time(res02 <- simple_wrapper(framework = "opencl",
-                                      context_ptr = cl_ctx,
-                                      kernel_ptr = cl_knl$opencl_mm_naive,
-                                      arg_types = opencl_arg_types,
-                                      arg_list = arg_list,
-                                      problem_dims = as.integer(c(dim01,
-                                                                  dim04,
-                                                                  1L)),
-                                      group_dims = NULL,
-                                      workers_per = NULL))
+  print(system.time(res02 <- simple_wrapper(framework = "opencl",
+                                            context_ptr = cl_ctx,
+                                            kernel_ptr = cl_knl$opencl_mm_naive,
+                                            arg_types = opencl_arg_types,
+                                            arg_list = arg_list,
+                                            problem_dims = as.integer(c(dim01,
+                                                                        dim04,
+                                                                        1L)),
+                                            group_dims = NULL,
+                                            workers_per = NULL)))
   plot(as.vector(res01),
        res02,
-       pch = 46)
+       pch = 46,
+       main = "opencl vs builtin values")
 }
 if (cuda_is_available() &
     cuda_devices_exist()) {
   print("CUDA implementation:")
-  system.time(res03 <- simple_wrapper(framework = "cuda",
-                                      context_ptr = cu_ctx,
-                                      kernel_ptr = cu_knl$cuda_mm_naive,
-                                      arg_types = cuda_arg_types,
-                                      arg_list = arg_list,
-                                      problem_dims = as.integer(c(dim01,
-                                                                  dim04,
-                                                                  1L)),
-                                      group_dims = NULL,
-                                      workers_per = NULL))
+  print(system.time(res03 <- simple_wrapper(framework = "cuda",
+                                            context_ptr = cu_ctx,
+                                            kernel_ptr = cu_knl$cuda_mm_naive,
+                                            arg_types = cuda_arg_types,
+                                            arg_list = arg_list,
+                                            problem_dims = as.integer(c(dim01,
+                                                                        dim04,
+                                                                        1L)),
+                                            group_dims = NULL,
+                                            workers_per = NULL)))
   plot(as.vector(res01),
        res03,
-       pch = 46)
+       pch = 46,
+       main = "cuda vs builtin values")
 }
 if (metal_is_available() &
     metal_devices_exist()) {
   print("Metal implementation:")
-  system.time(res03 <- simple_wrapper(framework = "metal",
-                                      context_ptr = mtl_ctx,
-                                      kernel_ptr = mtl_knl$metal_mm_naive,
-                                      arg_types = metal_arg_types,
-                                      arg_list = arg_list,
-                                      problem_dims = as.integer(c(dim01,
-                                                                  dim04,
-                                                                  1L)),
-                                      group_dims = NULL,
-                                      workers_per = NULL))
+  print(system.time(res03 <- simple_wrapper(framework = "metal",
+                                            context_ptr = mtl_ctx,
+                                            kernel_ptr = mtl_knl$metal_mm_naive,
+                                            arg_types = metal_arg_types,
+                                            arg_list = arg_list,
+                                            problem_dims = as.integer(c(dim01,
+                                                                        dim04,
+                                                                        1L)),
+                                            group_dims = NULL,
+                                            workers_per = NULL)))
   plot(as.vector(res01),
        res03,
-       pch = 46)
+       pch = 46,
+       main = "metal vs builtin values")
 }
 
 ## -----------------------------------------------------------------------------

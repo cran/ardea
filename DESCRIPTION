@@ -1,7 +1,7 @@
 Package: ardea
 Type: Package
 Title: Infrastructure for Interacting with GPUs
-Version: 0.0.9
+Version: 0.1.1
 Authors@R: c(
     person("Nicholas",
             "Cooley",
@@ -25,6 +25,6 @@ Author: Nicholas Cooley [aut, cre] (ORCID:
 Maintainer: Nicholas Cooley <npcooley@gmail.com>
 URL: https://github.com/npcooley/ardea
 BugReports: https://github.com/npcooley/ardea/issues
-Packaged: 2026-09-28 12:01:41 UTC; nicholascooley
+Packaged: 2026-10-08 18:59:00 UTC; nicholascooley
 Repository: CRAN
-Date/Publication: 2026-10-08 10:50:02 UTC
+Date/Publication: 2026-10-09 06:30:02 UTC
